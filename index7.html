@@ -1,0 +1,52 @@
+<html>
+
+<body>
+
+    <div>
+        <input id="title" type="text" placeholder="title"><br>
+        <input id="desc" type="text" placeholder="desc"><br>
+
+        <div id="container">
+        </div>
+        <script>
+
+            function createChild(title, desc, id) {
+                const child = document.createElement("div");
+                const firstGrandParent = document.createElement("div");
+                firstGrandParent.innerHTML = title;
+                const secondGrandParennts = document.createElement("div");
+                secondGrandParennts.innerHTML = desc;
+                const thirdGrandParennts = document.createElement("button");
+                thirdGrandParennts.innerHTML = "mark as done";
+                thirdGrandParennts.setAttribute("onclick", `markAsDone(${id})`);
+                child.appendChild(firstGrandParent);
+                child.appendChild(secondGrandParennts);
+                child.appendChild(thirdGrandParennts);
+                child.setAttribute("id", id);
+                return child;
+
+            }
+            //state will always be an array 
+            // every element of state would have a tittle,description and id
+            function updateDomAccToState(state) {
+                const parent = document.getElementById("container");
+                parent.innerHTML = "";
+                for (let i = 0; i < state.length; i++) {
+                    const child = createChild(state[i].title, state[i].description, state[i].id);
+                    parent.appendChild(child);
+
+                }
+            }
+            window.setInterval(async function() {
+                const res = await fetch("localhost:3000/")
+                const json = await res.json();
+                updateDomAccToState(json.todos)
+                
+            },5000)
+       
+
+        </script>
+</body>
+
+
+</html>
